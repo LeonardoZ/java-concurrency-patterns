@@ -40,6 +40,7 @@ public class UsingFutureTasks {
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			e.printStackTrace();
 		}
+		executor.shutdown();
 	}
 
 }

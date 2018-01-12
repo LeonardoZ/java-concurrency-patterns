@@ -1,4 +1,4 @@
-package br.com.leonardoz.patterns.conditon_queues;
+package br.com.leonardoz.patterns.condition_queues;
 
 import java.util.LinkedList;
 import java.util.List;

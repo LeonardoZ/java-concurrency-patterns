@@ -1,5 +1,7 @@
 package br.com.leonardoz.features.locks;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -58,20 +60,22 @@ public class UsingExplicitReentrantLocks {
 	}
 
 	public static void main(String[] args) {
+		ExecutorService executor = Executors.newCachedThreadPool();
 		UsingExplicitReentrantLocks uel = new UsingExplicitReentrantLocks();
 		for (int i = 0; i < 10; i++) {
-			new Thread(() -> uel.lockMyHearth()).start();
+			executor.execute(() -> uel.lockMyHearth());
 		}
 
 		for (int i = 0; i < 40; i++) {
-			new Thread(() -> {
+			executor.execute(() -> {
 				try {
 					uel.lockMyHearthWithTiming();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}).start();
+			});
 		}
+		executor.shutdown();
 	}
 
 }

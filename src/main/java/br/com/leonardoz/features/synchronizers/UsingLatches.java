@@ -1,6 +1,8 @@
 package br.com.leonardoz.features.synchronizers;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class UsingLatches {
 
 	public static void main(String[] args) {
+		ExecutorService executor = Executors.newCachedThreadPool();
 		CountDownLatch latch = new CountDownLatch(3);
 		Runnable r = () -> {
 			try {
@@ -27,15 +30,16 @@ public class UsingLatches {
 				e.printStackTrace();
 			}
 		};
-		new Thread(r).start();
-		new Thread(r).start();
-		new Thread(r).start();
+		executor.execute(r);
+		executor.execute(r);
+		executor.execute(r);
 		try {
 			latch.await(2, TimeUnit.SECONDS);
 			System.out.println("All services up and running!");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		executor.shutdown();
 	}
 
 }

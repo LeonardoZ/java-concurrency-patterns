@@ -5,7 +5,10 @@ import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Concurrent collections are an alternative to the Synchronized Collections.
@@ -35,6 +38,7 @@ public class UsingConcurrentCollections {
 	 * - Just a few Writers can modify it.
 	 */
 	public static void usingConcurrentHashMap() {
+		ExecutorService executor = Executors.newCachedThreadPool();
 		System.out.println("=== ConcurrentHashMap ===");
 		Random random = new Random();
 		ConcurrentHashMap<UUID, Integer> valuesPerUuid = new ConcurrentHashMap<>();
@@ -45,18 +49,22 @@ public class UsingConcurrentCollections {
 		for (int i = 0; i < 100; i++) {
 			if (i % 6 == 0) {
 				// write
-				new Thread(() -> {
+				executor.execute(() -> {
 					UUID uuid = UUID.randomUUID();
 					Integer value = random.nextInt(10);
 					System.out.println("Added " + uuid + " - " + value);
 					valuesPerUuid.putIfAbsent(uuid, value);
-				}).start();
+				});
 			} else {
 				// read
-				new Thread(() -> System.out.println("Printed " + valuesPerUuid.values().toString())).start();
+				executor.execute(() -> System.out.println("Printed " + valuesPerUuid.values().toString()));
 			}
 		}
+
+		// Finishing
+		executor.shutdown();
 		try {
+			executor.awaitTermination(2000, TimeUnit.SECONDS);
 			// space for other examples
 			Thread.sleep(2000);
 			System.out.println("\n\n\n\n");
@@ -79,6 +87,7 @@ public class UsingConcurrentCollections {
 	 * 
 	 */
 	public static void usingCopyOnWriteArrayList() {
+		ExecutorService executor = Executors.newCachedThreadPool();
 		System.out.println("=== CopyOnWriteArrayList ===");
 		Random random = new Random();
 		// No ConcurrentModificationException
@@ -87,23 +96,27 @@ public class UsingConcurrentCollections {
 		for (int i = 0; i < 100; i++) {
 			if (i % 8 == 0) {
 				// write
-				new Thread(() -> {
+				executor.execute(() -> {
 					Integer value = random.nextInt(10);
 					System.err.println("Added " + value);
 					copyOnWriteArrayList.add(value);
-				}).start();
+				});
 			} else {
 				// read
-				new Thread(() -> {
+				executor.execute(() -> {
 					StringBuilder sb = new StringBuilder();
 					for (Integer vv : copyOnWriteArrayList) {
 						sb.append(vv + " ");
 					}
 					System.out.println("Reading " + sb.toString());
-				}).start();
+				});
 			}
 		}
+
+		// Finishing
+		executor.shutdown();
 		try {
+			executor.awaitTermination(2000, TimeUnit.SECONDS);
 			// space for other examples
 			Thread.sleep(2000);
 			System.out.println("\n\n\n\n");
@@ -168,7 +181,7 @@ public class UsingConcurrentCollections {
 			}
 		};
 
-		// Multiple producers
+		// Multiple producers - Examples using simple threads this time. 
 		Thread producer1 = new Thread(runProducer);
 		producer1.start();
 		Thread producer2 = new Thread(runProducer);

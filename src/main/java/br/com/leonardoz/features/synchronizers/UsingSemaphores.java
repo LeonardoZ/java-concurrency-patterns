@@ -1,5 +1,7 @@
 package br.com.leonardoz.features.synchronizers;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class UsingSemaphores {
 	public static void main(String[] args) {
-
+		ExecutorService executor = Executors.newCachedThreadPool();
 		Semaphore semaphore = new Semaphore(3);
 
 		Runnable r = () -> {
@@ -38,8 +40,10 @@ public class UsingSemaphores {
 			}
 		};
 		for (int i = 0; i < 4; i++) {
-			new Thread(r).start();
+			executor.execute(r);
 		}
+		
+		executor.shutdown();
 
 	}
 }

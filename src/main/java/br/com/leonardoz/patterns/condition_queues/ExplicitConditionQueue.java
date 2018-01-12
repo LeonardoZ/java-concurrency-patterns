@@ -1,4 +1,4 @@
-package br.com.leonardoz.patterns.conditon_queues;
+package br.com.leonardoz.patterns.condition_queues;
 
 import java.util.UUID;
 import java.util.concurrent.locks.Condition;
@@ -59,6 +59,7 @@ public class ExplicitConditionQueue {
 
 	public static void main(String[] args) {
 		ExplicitConditionQueue eqc = new ExplicitConditionQueue();
+		// Will run indefinitely
 		new Thread(() -> {
 			while (true) {
 				String uuidMessage = UUID.randomUUID().toString();

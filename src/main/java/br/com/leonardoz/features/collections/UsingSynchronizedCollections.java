@@ -1,6 +1,9 @@
 package br.com.leonardoz.features.collections;
 
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Synchronized collections synchronizes every public method to encapsulate
@@ -47,7 +50,8 @@ public class UsingSynchronizedCollections {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
+		ExecutorService executor = Executors.newCachedThreadPool();
 		// Synchronized - Vector
 		Vector<Long> vec = new Vector<>();
 
@@ -56,8 +60,10 @@ public class UsingSynchronizedCollections {
 			insertIfAbsent(vec, millis);
 		};
 		for (int i = 0; i < 10001; i++) {
-			new Thread(insertIfAbsent).start();
+			executor.execute(insertIfAbsent);
 		}
+		executor.shutdown();
+		executor.awaitTermination(4000, TimeUnit.SECONDS);
 
 		// Using the wrappers for not sync collections
 		// List<String> synchronizedList = Collections.synchronizedList(abcList);

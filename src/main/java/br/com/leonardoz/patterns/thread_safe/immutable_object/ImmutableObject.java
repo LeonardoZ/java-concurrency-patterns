@@ -10,13 +10,15 @@ package br.com.leonardoz.patterns.thread_safe.immutable_object;
  * IMPORTANT: references to immutable objects are not thread-safe.
  * 
  * Intent: Make all fields final and don't use any method that can mutate the
- * internal state of the object. It's important to refer to an immutable object
- * using a volatile field, because it has visibility guarantees (every change to
- * the immutable object variable will be made visible to all threads), and any
- * synchronizing mechanism to ensure thread-safety for the reference.
+ * internal state of the object; don't expose the object until it's full
+ * created; make the class final, prohibiting extension. It's important to refer
+ * to an immutable object using a volatile field, because it has visibility
+ * guarantees (every change to the immutable object variable will be made
+ * visible to all threads), and any synchronizing mechanism to ensure
+ * thread-safety for the reference.
  * 
- * Applicability: When sharing a object, use Immutable Objects
- * being referenced by a volatile fields whatever it's possible.
+ * Applicability: When sharing a object, use Immutable Objects being referenced
+ * by a volatile fields whatever it's possible.
  *
  */
 public class ImmutableObject {

@@ -3,7 +3,7 @@ package br.com.leonardoz.patterns.thread_safe.initialization;
 /**
  * Pattern: Safe Lazy Initialization
  * 
- * Motivations: Due to the JMM, some lazy initialization patterns can be unsafe.
+ * Motivations: Due to the Java Memory Model, some lazy initialization patterns can be unsafe.
  * Apply the Lazy Initialization idiom correctly using the mechanisms provided
  * by the JVM.
  * 

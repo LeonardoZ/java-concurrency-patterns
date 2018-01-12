@@ -3,6 +3,8 @@ package br.com.leonardoz.features.synchronizers;
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Barriers are used for blocking a group of threads until they come together at
@@ -17,6 +19,8 @@ import java.util.concurrent.CyclicBarrier;
 public class UsingBarriers {
 
 	public static void main(String[] args) {
+
+		ExecutorService executor = Executors.newCachedThreadPool();
 		Runnable barrierAction = () -> System.out.println("Well done, guys!");
 
 		CyclicBarrier barrier = new CyclicBarrier(10, barrierAction);
@@ -34,8 +38,9 @@ public class UsingBarriers {
 		};
 
 		for (int i = 0; i < 10; i++) {
-			new Thread(task).start();
+			executor.execute(task);
 		}
+		executor.shutdown();
 
 	}
 

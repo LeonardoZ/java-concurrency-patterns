@@ -1,5 +1,8 @@
 package br.com.leonardoz.features.locks;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Every Java object has an intrinsic lock (or a monitor lock) associated with
  * it.
@@ -66,19 +69,20 @@ public class UsingIntrinsicLocks {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
+		ExecutorService executor = Executors.newCachedThreadPool();
 		UsingIntrinsicLocks uil = new UsingIntrinsicLocks();
 		for (int i = 0; i < 100; i++) {
-			new Thread(() -> uil.mySynchronizedMethod()).start();
+			executor.execute(() -> uil.mySynchronizedMethod());
 		}
 		Thread.sleep(1000);
 		for (int i = 0; i < 10; i++) {
-			new Thread(() -> uil.mySynchronizedBlock()).start();
+			executor.execute(() -> uil.mySynchronizedBlock());
 		}
 		Thread.sleep(1000);
 		for (int i = 0; i < 10; i++) {
-			new Thread(() -> uil.reentrancy()).start();
+			executor.execute(() -> uil.reentrancy());
 		}
-
+		executor.shutdown();
 	}
 
 }
