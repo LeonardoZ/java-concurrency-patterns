@@ -29,9 +29,9 @@ public class UsingConcurrentCollections {
 	 * 
 	 * - Don't throw ConcurrentModificationException
 	 * 
-	 * - size() and isEmpty() can be incorrect. Don't relly on then.
+	 * - size() and isEmpty() can be incorrect. Don't rely on them.
 	 * 
-	 * - Supports atomic operations, doen't neet client side locking.
+	 * - Supports atomic operations, doen't need client side locking.
 	 * 
 	 * - Readers can access concurrently, and iterator have weak consistency.
 	 * 
