@@ -25,6 +25,7 @@ Concurrency Patterns and features found in Java, through multithreaded programmi
   *	Single Thread Pool
   *	Scheduled Thread Pool
 * Atomics
+* Java Memory Model
 
 ## Patterns
 * Protect Shared State
