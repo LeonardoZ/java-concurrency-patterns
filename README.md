@@ -11,7 +11,6 @@ Concurrency Patterns and features found in Java, through multithreaded programmi
 	* ReadWrite 
 * Synchronizers
   *	Latches
-  *	Future Tasks
   *	Semaphores
   *	Barriers
 * Synchronized Collections
@@ -25,6 +24,9 @@ Concurrency Patterns and features found in Java, through multithreaded programmi
   *	Single Thread Pool
   *	Scheduled Thread Pool
 * Atomics
+* Futures
+  * FutureTask
+  * CompletableFuture
 * Java Memory Model
 
 ## Patterns

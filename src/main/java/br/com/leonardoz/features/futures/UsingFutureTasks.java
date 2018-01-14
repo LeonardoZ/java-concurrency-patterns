@@ -1,4 +1,4 @@
-package br.com.leonardoz.features.synchronizers;
+package br.com.leonardoz.features.futures;
 
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -10,6 +10,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
+ * FutureTask<V> represents an asynchronous computation. It has methods to check
+ * if the computation is completed and to cancel it if needed.
+ * 
  * Used for computing long running tasks/IO tasks.
  * 
  * Act as a latch and has three states: waiting for run, running or completed.
