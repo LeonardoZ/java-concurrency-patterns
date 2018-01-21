@@ -130,7 +130,7 @@ import java.util.function.Supplier;
  * 
  * CompletableFuture.join() // same as get
  * 
- * CompletableFuture.getNow(valueIfAbsent) // immediatly return
+ * CompletableFuture.getNow(valueIfAbsent) // immediately return
  * 
  * CompletableFuture.completeExceptionally() // completes throwing a exception
  * 
