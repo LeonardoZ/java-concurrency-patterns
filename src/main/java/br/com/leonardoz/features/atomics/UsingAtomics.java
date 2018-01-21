@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * boolean indicating success or not. All atomic, only blocking briefly.
  * 
  * Interesting classes in this package are: AtomicBoolean, AtomicLong,
- * AtomicReference<T>, AtomicMarkablereference<T> and
+ * AtomicReference<T>, AtomicMarkableReference<T> and
  * AtomicReferenceFieldUpdater<T, V>.
  * 
  *

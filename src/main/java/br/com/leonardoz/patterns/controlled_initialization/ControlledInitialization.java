@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
  * speed up the process. And in order to proceed with the programming logic
  * flux, it's important to ensure that the initialization has been completed.
  * 
- * Intent: Use CountDownLatche to crate a controlled concurrent initialization
+ * Intent: Use CountDownLatch to crate a controlled concurrent initialization
  * mechanism.
  * 
  * Applicability: When you have multiple expensive resources being initialized

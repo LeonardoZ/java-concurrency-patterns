@@ -62,12 +62,12 @@ public class UsingExecutors {
 		ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
 		List<Future<UUID>> uuids = new LinkedList<>();
 		for (int i = 0; i < 10; i++) {
-			Future<UUID> submited = cachedThreadPool.submit(() -> {
+			Future<UUID> submitted = cachedThreadPool.submit(() -> {
 				UUID randomUUID = UUID.randomUUID();
 				System.out.println("UUID " + randomUUID + " from " + Thread.currentThread().getName());
 				return randomUUID;
 			});
-			uuids.add(submited);
+			uuids.add(submitted);
 		}
 		cachedThreadPool.execute(() -> uuids.forEach((f) -> {
 			try {
@@ -91,12 +91,12 @@ public class UsingExecutors {
 		ExecutorService fixedPool = Executors.newFixedThreadPool(4);
 		List<Future<UUID>> uuids = new LinkedList<>();
 		for (int i = 0; i < 20; i++) {
-			Future<UUID> submited = fixedPool.submit(() -> {
+			Future<UUID> submitted = fixedPool.submit(() -> {
 				UUID randomUUID = UUID.randomUUID();
 				System.out.println("UUID " + randomUUID + " from " + Thread.currentThread().getName());
 				return randomUUID;
 			});
-			uuids.add(submited);
+			uuids.add(submitted);
 		}
 		fixedPool.execute(() -> uuids.forEach((f) -> {
 			try {

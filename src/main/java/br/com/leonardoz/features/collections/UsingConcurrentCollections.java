@@ -31,7 +31,7 @@ public class UsingConcurrentCollections {
 	 * 
 	 * - size() and isEmpty() can be incorrect. Don't rely on them.
 	 * 
-	 * - Supports atomic operations, doen't need client side locking.
+	 * - Supports atomic operations, don't need client side locking.
 	 * 
 	 * - Readers can access concurrently, and iterator have weak consistency.
 	 * 
@@ -129,7 +129,7 @@ public class UsingConcurrentCollections {
 	 * Concurrent Queue interface.
 	 * 
 	 * Implementations: LinkedBlockingQueue, ArrayBlockingQueue,
-	 * PriorirtBlockingQueue, SynchronizedQueue.
+	 * PriorityBlockingQueue, SynchronizedQueue.
 	 * 
 	 * Used for the Producer-Consumer pattern.
 	 * 
