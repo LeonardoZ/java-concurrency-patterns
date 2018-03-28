@@ -60,7 +60,7 @@ public class TaskConvergence {
 	public TaskConvergence() {
 		barrier = new CyclicBarrier(CORES, onComplete);
 		synchronizedLinkedList = Collections.synchronizedList(new LinkedList<>());
-		executor = Executors.newFixedThreadPool(4);
+		executor = Executors.newFixedThreadPool(CORES);
 	}
 
 	public void run() {
