@@ -13,8 +13,8 @@ package br.com.leonardoz.features.java_memory_model;
  * == Reordering ==
  * 
  * When data is shared across threads, there's not so much guarantees on the
- * execution order by the threads, and because of the imprevisibility, it's
- * import to identify shared data and to use a proper synchronization mechanism
+ * execution order by the threads, and because of the unpredictability, it's
+ * important to identify shared data and to use a proper synchronization mechanism
  * to ensure order and to keep the visibility guarantees provided by the JMM.
  * 
  * == Happens-Before ==
