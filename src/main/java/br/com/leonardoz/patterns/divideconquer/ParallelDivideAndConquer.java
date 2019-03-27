@@ -20,7 +20,7 @@ import java.util.concurrent.RecursiveTask;
  * Applicability: Divide and conquer computations.
  * 
  */
-public class DivideAndConquer {
+public class ParallelDivideAndConquer {
 
 	private final static int THRESHOLD = 10; // Choosing a number to split the computation
 	

@@ -11,6 +11,9 @@ import java.util.stream.LongStream;
  * Pattern: Parallel Divide and Conquer
  * 
  * Example: Parallel Sum
+ * 
+ * This is a simple example for educational purpose only, run on your 
+ * machine and check which one is better!
  */
 public class ParallelSum extends RecursiveTask<BigInteger> {
 
