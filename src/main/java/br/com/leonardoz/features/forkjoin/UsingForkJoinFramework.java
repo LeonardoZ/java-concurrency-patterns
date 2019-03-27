@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 
@@ -202,11 +201,6 @@ public class UsingForkJoinFramework {
 		RecSumTask task = new RecSumTask(numbers);
 		BigInteger result = commonPool.invoke(task);
 		System.out.println("Result is: " + result);
-		try {
-			commonPool.awaitTermination(4, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		System.out.println("\n\n");
 	}
 
