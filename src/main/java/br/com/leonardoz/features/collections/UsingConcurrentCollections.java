@@ -155,6 +155,8 @@ public class UsingConcurrentCollections {
 
 				} catch (InterruptedException e) {
 					// interrupted pattern
+					// InterruptedException makes isInterrupted returns false
+					Thread.currentThread().interrupt(); 
 					System.err.println("Consumer Finished");
 				}
 			}
@@ -181,7 +183,7 @@ public class UsingConcurrentCollections {
 			}
 		};
 
-		// Multiple producers - Examples using simple threads this time. 
+		// Multiple producers - Examples using simple threads this time.
 		Thread producer1 = new Thread(runProducer);
 		producer1.start();
 		Thread producer2 = new Thread(runProducer);
@@ -204,8 +206,8 @@ public class UsingConcurrentCollections {
 	}
 
 	public static void main(String[] args) {
-		usingConcurrentHashMap();
-		usingCopyOnWriteArrayList();
+//		usingConcurrentHashMap();
+//		usingCopyOnWriteArrayList();
 		usingBlockingQueue();
 	}
 

@@ -19,7 +19,7 @@ public class ThreadTaskCancel {
 	private Thread thread;
 	private Runnable task = () -> {
 		while (!Thread.currentThread().isInterrupted()) {
-			// keep going
+			// keep going - be aware of using this Pattern with the Interrupted exception! It won't work.
 		}
 	};
 
