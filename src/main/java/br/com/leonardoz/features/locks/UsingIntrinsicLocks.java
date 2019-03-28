@@ -1,6 +1,5 @@
 package br.com.leonardoz.features.locks;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -69,18 +68,18 @@ public class UsingIntrinsicLocks {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		ExecutorService executor = Executors.newCachedThreadPool();
-		UsingIntrinsicLocks uil = new UsingIntrinsicLocks();
+		var executor = Executors.newCachedThreadPool();
+		var self = new UsingIntrinsicLocks();
 		for (int i = 0; i < 100; i++) {
-			executor.execute(() -> uil.mySynchronizedMethod());
+			executor.execute(() -> self.mySynchronizedMethod());
 		}
 		Thread.sleep(1000);
 		for (int i = 0; i < 10; i++) {
-			executor.execute(() -> uil.mySynchronizedBlock());
+			executor.execute(() -> self.mySynchronizedBlock());
 		}
 		Thread.sleep(1000);
 		for (int i = 0; i < 10; i++) {
-			executor.execute(() -> uil.reentrancy());
+			executor.execute(() -> self.reentrancy());
 		}
 		executor.shutdown();
 	}

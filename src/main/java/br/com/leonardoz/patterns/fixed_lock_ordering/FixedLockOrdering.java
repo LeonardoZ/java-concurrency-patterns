@@ -38,8 +38,8 @@ public class FixedLockOrdering {
 	}
 
 	public void doSomeOperation(LockableObject obj1, LockableObject obj2) {
-		int obj1Id = obj1.getId();
-		int obj2Id = obj2.getId();
+		var obj1Id = obj1.getId();
+		var obj2Id = obj2.getId();
 		if (obj1Id < obj2Id) {
 			synchronized (obj1) {
 				synchronized (obj2) {

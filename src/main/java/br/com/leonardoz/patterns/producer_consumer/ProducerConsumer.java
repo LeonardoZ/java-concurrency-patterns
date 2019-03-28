@@ -3,7 +3,6 @@ package br.com.leonardoz.patterns.producer_consumer;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +27,7 @@ public class ProducerConsumer {
 
 	private Callable<Void> consumer = () -> {
 		while (true) {
-			String dataUnit = data.poll(5, TimeUnit.SECONDS);
+			var dataUnit = data.poll(5, TimeUnit.SECONDS);
 			if (dataUnit == null)
 				break;
 			System.out.println("Consumed " + dataUnit + " from " + Thread.currentThread().getName());
@@ -38,14 +37,14 @@ public class ProducerConsumer {
 
 	private Callable<Void> producer = () -> {
 		for (int i = 0; i < 90_000; i++) {
-			String dataUnit = UUID.randomUUID().toString();
+			var dataUnit = UUID.randomUUID().toString();
 			data.put(dataUnit);
 		}
 		return null;
 	};
 
 	public void run(long forHowLong, TimeUnit unit) throws InterruptedException {
-		ExecutorService pool = Executors.newCachedThreadPool();
+		var pool = Executors.newCachedThreadPool();
 		pool.submit(producer);
 		pool.submit(consumer);
 		pool.submit(consumer);
@@ -54,7 +53,7 @@ public class ProducerConsumer {
 	}
 
 	public static void main(String[] args) {
-		ProducerConsumer producerConsumer = new ProducerConsumer();
+		var producerConsumer = new ProducerConsumer();
 		try {
 			producerConsumer.run(5, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {

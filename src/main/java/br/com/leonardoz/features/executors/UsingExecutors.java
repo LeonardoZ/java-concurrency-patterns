@@ -1,14 +1,11 @@
 package br.com.leonardoz.features.executors;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -53,7 +50,7 @@ public class UsingExecutors {
 
 	public static void usingSingleThreadExecutor() {
 		System.out.println("=== SingleThreadExecutor ===");
-		ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
+		var singleThreadExecutor = Executors.newSingleThreadExecutor();
 		singleThreadExecutor.execute(() -> System.out.println("Print this."));
 		singleThreadExecutor.execute(() -> System.out.println("and this one to."));
 		singleThreadExecutor.shutdown();
@@ -67,15 +64,15 @@ public class UsingExecutors {
 
 	public static void usingCachedThreadPool() {
 		System.out.println("=== CachedThreadPool ===");
-		ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
-		List<Future<UUID>> uuids = new LinkedList<>();
+		var cachedThreadPool = Executors.newCachedThreadPool();
+		var uuids = new LinkedList<Future<UUID>>();
 		for (int i = 0; i < 10; i++) {
-			Future<UUID> submitted = cachedThreadPool.submit(() -> {
-				UUID randomUUID = UUID.randomUUID();
+			var submittedUUID = cachedThreadPool.submit(() -> {
+				var randomUUID = UUID.randomUUID();
 				System.out.println("UUID " + randomUUID + " from " + Thread.currentThread().getName());
 				return randomUUID;
 			});
-			uuids.add(submitted);
+			uuids.add(submittedUUID);
 		}
 		cachedThreadPool.execute(() -> uuids.forEach((f) -> {
 			try {
@@ -96,11 +93,11 @@ public class UsingExecutors {
 
 	public static void usingFixedThreadPool() {
 		System.out.println("=== FixedThreadPool ===");
-		ExecutorService fixedPool = Executors.newFixedThreadPool(4);
-		List<Future<UUID>> uuids = new LinkedList<>();
+		var fixedPool = Executors.newFixedThreadPool(4);
+		var uuids = new LinkedList<Future<UUID>>();
 		for (int i = 0; i < 20; i++) {
-			Future<UUID> submitted = fixedPool.submit(() -> {
-				UUID randomUUID = UUID.randomUUID();
+			var submitted = fixedPool.submit(() -> {
+				var randomUUID = UUID.randomUUID();
 				System.out.println("UUID " + randomUUID + " from " + Thread.currentThread().getName());
 				return randomUUID;
 			});
@@ -124,7 +121,7 @@ public class UsingExecutors {
 
 	public static void usingScheduledThreadPool() {
 		System.out.println("=== ScheduledThreadPool ===");
-		ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(4);
+		var scheduledThreadPool = Executors.newScheduledThreadPool(4);
 		scheduledThreadPool.scheduleAtFixedRate(() -> System.out.println("1) Print every 2s"), 0, 2, TimeUnit.SECONDS);
 		scheduledThreadPool.scheduleAtFixedRate(() -> System.out.println("2) Print every 2s"), 0, 2, TimeUnit.SECONDS);
 		scheduledThreadPool.scheduleWithFixedDelay(() -> System.out.println("3) Print every 2s delay"), 0, 2,
@@ -141,7 +138,7 @@ public class UsingExecutors {
 	
 	public static void usingSingleTreadScheduledExecutor() {
 		System.out.println("=== SingleThreadScheduledThreadPool ===");
-		ScheduledExecutorService singleThreadScheduler = Executors.newSingleThreadScheduledExecutor();
+		var singleThreadScheduler = Executors.newSingleThreadScheduledExecutor();
 		singleThreadScheduler.scheduleAtFixedRate(() -> System.out.println("1) Print every 2s"), 0, 2, TimeUnit.SECONDS);
 		singleThreadScheduler.scheduleWithFixedDelay(() -> System.out.println("2) Print every 2s delay"), 0, 2,
 				TimeUnit.SECONDS);
@@ -158,21 +155,21 @@ public class UsingExecutors {
 
 	public static void usingWorkStealingThreadPool() {
 		System.out.println("=== WorkStealingThreadPool ===");
-		ExecutorService workStealingPool = Executors.newWorkStealingPool();
+		var workStealingPool = Executors.newWorkStealingPool();
 
 		workStealingPool.execute(() -> System.out.println("Prints normally"));
 
 		Callable<UUID> generatesUUID = UUID::randomUUID;
-		List<Callable<UUID>> severalUUIDsTasks = new LinkedList<>();
+		var severalUUIDsTasks = new LinkedList<Callable<UUID>>();
 		for (int i = 0; i < 20; i++) {
 			severalUUIDsTasks.add(generatesUUID);
 		}
 
 		try {
-			List<Future<UUID>> futureUUIDs = workStealingPool.invokeAll(severalUUIDsTasks);
-			for (Future<UUID> future : futureUUIDs) {
+			var futureUUIDs = workStealingPool.invokeAll(severalUUIDsTasks);
+			for (var future : futureUUIDs) {
 				if (future.isDone()) {
-					UUID uuid = future.get();
+					var uuid = future.get();
 					System.out.println("New UUID :" + uuid);
 				}
 			}

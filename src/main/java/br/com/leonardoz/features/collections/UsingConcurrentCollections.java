@@ -2,10 +2,8 @@ package br.com.leonardoz.features.collections;
 
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -38,10 +36,10 @@ public class UsingConcurrentCollections {
 	 * - Just a few Writers can modify it.
 	 */
 	public static void usingConcurrentHashMap() {
-		ExecutorService executor = Executors.newCachedThreadPool();
 		System.out.println("=== ConcurrentHashMap ===");
-		Random random = new Random();
-		ConcurrentHashMap<UUID, Integer> valuesPerUuid = new ConcurrentHashMap<>();
+		var executor = Executors.newCachedThreadPool();
+		var random = new Random();
+		var valuesPerUuid = new ConcurrentHashMap<UUID, Integer>();
 		// atomic operations
 		valuesPerUuid.putIfAbsent(UUID.randomUUID(), random.nextInt(100));
 
@@ -87,28 +85,28 @@ public class UsingConcurrentCollections {
 	 * 
 	 */
 	public static void usingCopyOnWriteArrayList() {
-		ExecutorService executor = Executors.newCachedThreadPool();
 		System.out.println("=== CopyOnWriteArrayList ===");
-		Random random = new Random();
+		var executor = Executors.newCachedThreadPool();
+		var random = new Random();
 		// No ConcurrentModificationException
-		CopyOnWriteArrayList<Integer> copyOnWriteArrayList = new CopyOnWriteArrayList<Integer>();
+		var copyOnWriteArrayList = new CopyOnWriteArrayList<Integer>();
 
 		for (int i = 0; i < 100; i++) {
 			if (i % 8 == 0) {
 				// write
 				executor.execute(() -> {
-					Integer value = random.nextInt(10);
+					var value = random.nextInt(10);
 					System.err.println("Added " + value);
 					copyOnWriteArrayList.add(value);
 				});
 			} else {
 				// read
 				executor.execute(() -> {
-					StringBuilder sb = new StringBuilder();
-					for (Integer vv : copyOnWriteArrayList) {
-						sb.append(vv + " ");
+					var builder = new StringBuilder();
+					for (var value : copyOnWriteArrayList) {
+						builder.append(value + " ");
 					}
-					System.out.println("Reading " + sb.toString());
+					System.out.println("Reading " + builder.toString());
 				});
 			}
 		}
@@ -142,7 +140,7 @@ public class UsingConcurrentCollections {
 		System.out.println("=== BlockingQueue ===");
 
 		// Bounded UUID queue
-		BlockingQueue<UUID> uuidQueue = new LinkedBlockingQueue<>(10);
+		var uuidQueue = new LinkedBlockingQueue<UUID>(10);
 
 		System.out.println("Queue will execute for 10s");
 
@@ -150,7 +148,7 @@ public class UsingConcurrentCollections {
 		Runnable runConsumer = () -> {
 			while (!Thread.currentThread().isInterrupted()) {
 				try {
-					UUID uuid = uuidQueue.take();
+					var uuid = uuidQueue.take();
 					System.out.println("Consumed: " + uuid + " by " + Thread.currentThread().getName());
 
 				} catch (InterruptedException e) {
@@ -161,9 +159,9 @@ public class UsingConcurrentCollections {
 				}
 			}
 		};
-		Thread consumer1 = new Thread(runConsumer);
+		var consumer1 = new Thread(runConsumer);
 		consumer1.start();
-		Thread consumer2 = new Thread(runConsumer);
+		var consumer2 = new Thread(runConsumer);
 		consumer2.start();
 
 		// Producer Thread
@@ -184,11 +182,11 @@ public class UsingConcurrentCollections {
 		};
 
 		// Multiple producers - Examples using simple threads this time.
-		Thread producer1 = new Thread(runProducer);
+		var producer1 = new Thread(runProducer);
 		producer1.start();
-		Thread producer2 = new Thread(runProducer);
+		var producer2 = new Thread(runProducer);
 		producer2.start();
-		Thread producer3 = new Thread(runProducer);
+		var producer3 = new Thread(runProducer);
 		producer3.start();
 
 		try {
@@ -206,8 +204,8 @@ public class UsingConcurrentCollections {
 	}
 
 	public static void main(String[] args) {
-//		usingConcurrentHashMap();
-//		usingCopyOnWriteArrayList();
+		usingConcurrentHashMap();
+		usingCopyOnWriteArrayList();
 		usingBlockingQueue();
 	}
 

@@ -2,7 +2,6 @@ package br.com.leonardoz.features.locks;
 
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
@@ -65,8 +64,8 @@ public class UsingExplicitReadWriteLocks {
 	}
 
 	public static void main(String[] args) {
-		ExecutorService executor = Executors.newCachedThreadPool();
-		UsingExplicitReadWriteLocks uerwl = new UsingExplicitReadWriteLocks();
+		var executor = Executors.newCachedThreadPool();
+		var self = new UsingExplicitReadWriteLocks();
 		// Readers
 		for (int i = 0; i < 100; i++) {
 			executor.submit(() -> {
@@ -76,13 +75,13 @@ public class UsingExplicitReadWriteLocks {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				System.out.println(uerwl.showContent());
+				System.out.println(self.showContent());
 			});
 		}
 
 		// Writers - only if no writer is available
 		for (int i = 0; i < 5; i++) {
-			executor.execute(() -> uerwl.writeContent(UUID.randomUUID().toString()));
+			executor.execute(() -> self.writeContent(UUID.randomUUID().toString()));
 		}
 		executor.shutdown();
 	}

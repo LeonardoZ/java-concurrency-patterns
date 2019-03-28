@@ -43,22 +43,26 @@ public class BackgroundTaskExecutor {
 	}
 
 	public <T> Future<T> execute(Callable<T> task) {
-		Future<T> submited = executor.submit(task);
+		var submited = executor.submit(task);
 		return submited;
 	}
 
 	public <T> List<Future<T>> execute(List<Callable<T>> tasks) {
-		List<Future<T>> futureTasks = tasks.stream().map(executor::submit).collect(Collectors.toList());
+		var futureTasks = tasks.stream()
+				.map(executor::submit)
+				.collect(Collectors.toList());
 		return futureTasks;
 	}
 
 	public <T> boolean cancel(Future<T> task) {
-		boolean canceled = task.cancel(true);
+		var canceled = task.cancel(true);
 		return canceled;
 	}
 
 	public <T> boolean cancel(List<FutureTask<T>> task) {
-		boolean hasAFalse = task.stream().map(f -> f.cancel(true)).anyMatch(b -> b.equals(false));
+		var hasAFalse = task.stream()
+				.map(f -> f.cancel(true))
+				.anyMatch(b -> b.equals(false));
 		return !hasAFalse;
 	}
 
@@ -71,7 +75,9 @@ public class BackgroundTaskExecutor {
 				return Optional.empty();
 			}
 		};
-		List<Optional<T>> results = tasks.stream().map(fn).collect(Collectors.toList());
+		var results = tasks.stream()
+				.map(fn)
+				.collect(Collectors.toList());
 		return results;
 	}
 
@@ -94,7 +100,7 @@ public class BackgroundTaskExecutor {
 	}
 
 	public List<Runnable> shutdownNowTasks(long timeout, TimeUnit timeUnit, OnShutdownError onShutdownError) {
-		List<Runnable> remainingTasks = executor.shutdownNow();
+		var remainingTasks = executor.shutdownNow();
 		try {
 			executor.awaitTermination(timeout, timeUnit);
 		} catch (InterruptedException e) {

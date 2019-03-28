@@ -14,7 +14,7 @@ public class BackgroundTimePrintTask {
 	private Thread thread;
 	private Runnable task = () -> {
 		while (!Thread.currentThread().isInterrupted()) {
-			Date date = new Date(System.currentTimeMillis());
+			var date = new Date(System.currentTimeMillis());
 			System.out.println(new SimpleDateFormat().format(date));
 			try {
 				Thread.sleep(1000);
@@ -37,13 +37,13 @@ public class BackgroundTimePrintTask {
 	}
 
 	public static void main(String[] args) {
-		BackgroundTimePrintTask bttt = new BackgroundTimePrintTask();
-		bttt.run();
+		var self = new BackgroundTimePrintTask();
+		self.run();
 		try {
 			Thread.sleep(4000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		bttt.cancel();
+		self.cancel();
 	}
 }

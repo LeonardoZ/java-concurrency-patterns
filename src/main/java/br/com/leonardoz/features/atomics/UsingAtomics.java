@@ -1,6 +1,5 @@
 package br.com.leonardoz.features.atomics;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -47,13 +46,13 @@ public class UsingAtomics {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		AtomicCounter counter = new AtomicCounter();
-		ExecutorService ctp = Executors.newCachedThreadPool();
+		var counter = new AtomicCounter();
+		var cachedThreadPool = Executors.newCachedThreadPool();
 		for (int i = 0; i < 10_000; i++) {
-			ctp.execute(() -> counter.increment());
+			cachedThreadPool.execute(() -> counter.increment());
 		}
-		ctp.shutdown();
-		ctp.awaitTermination(4000, TimeUnit.SECONDS);
+		cachedThreadPool.shutdown();
+		cachedThreadPool.awaitTermination(4000, TimeUnit.SECONDS);
 		System.out.println("Result shound be 10000: Actual result is: " + counter.get());
 	}
 }

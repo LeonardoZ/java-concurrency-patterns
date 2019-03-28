@@ -48,8 +48,8 @@ public class CoinTransfer {
 	}
 
 	public void transferBetweenPlayers(Player playerFrom, Player playerTo, BigInteger amount) {
-		int from = playerFrom.getId();
-		int to = playerTo.getId();
+		var from = playerFrom.getId();
+		var to = playerTo.getId();
 		if (from < to) {
 			synchronized (playerFrom) {
 				synchronized (playerTo) {

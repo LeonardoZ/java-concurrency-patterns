@@ -22,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ExplicitConditionQueue {
 
-	private static final int LIMIT = 8;
+	private static final int LIMIT = 5;
 	private int messageCount = 0;
 	private Lock lock = new ReentrantLock();
 	private Condition limitReachedCondition = lock.newCondition();
@@ -58,13 +58,13 @@ public class ExplicitConditionQueue {
 	}
 
 	public static void main(String[] args) {
-		ExplicitConditionQueue eqc = new ExplicitConditionQueue();
+		var queue = new ExplicitConditionQueue();
 		// Will run indefinitely
 		new Thread(() -> {
 			while (true) {
-				String uuidMessage = UUID.randomUUID().toString();
+				var uuidMessage = UUID.randomUUID().toString();
 				try {
-					eqc.printMessages(uuidMessage);
+					queue.printMessages(uuidMessage);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -73,7 +73,7 @@ public class ExplicitConditionQueue {
 		new Thread(() -> {
 			while (true) {
 				try {
-					eqc.stopMessages();
+					queue.stopMessages();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

@@ -49,7 +49,11 @@ public class UsingParallelStreams {
 		System.out.println("\n");
 
 		// Runs sequentially, in order.
-		IntStream.rangeClosed(0, 20).mapToObj(Integer::toString).forEach(System.out::print);
+		IntStream.rangeClosed(0, 20)
+			.mapToObj(Integer::toString)
+			.forEach(System.out::print);
+		
+		System.out.println("\n");
 
 		dummyPerformanceCheck();
 	}
@@ -57,27 +61,32 @@ public class UsingParallelStreams {
 	private static void dummyPerformanceCheck() {
 
 		// Sequential Stream
-		long start1 = System.currentTimeMillis();
-		IntStream.rangeClosed(0, 50_000).mapToObj(BigInteger::valueOf).map(UsingParallelStreams::isPrime)
+		var start1 = System.currentTimeMillis();
+		IntStream.rangeClosed(0, 50_000)
+				.mapToObj(BigInteger::valueOf)
+				.map(UsingParallelStreams::isPrime)
 				.collect(Collectors.toList());
-		long end1 = System.currentTimeMillis();
-		long time1 = (end1 - start1) / 1000;
+		var end1 = System.currentTimeMillis();
+		var time1 = (end1 - start1) / 1000;
 		System.out.println("Sequential: " + time1);
 
 		// Parallel Stream
-		long start2 = System.currentTimeMillis();
-		IntStream.rangeClosed(0, 50_000).parallel().mapToObj(BigInteger::valueOf).map(UsingParallelStreams::isPrime)
+		var start2 = System.currentTimeMillis();
+		IntStream.rangeClosed(0, 50_000)
+				.parallel()
+				.mapToObj(BigInteger::valueOf)
+				.map(UsingParallelStreams::isPrime)
 				.collect(Collectors.toList());
-		long end2 = System.currentTimeMillis();
-		long time2 = (end2 - start2) / 1000;
+		var end2 = System.currentTimeMillis();
+		var time2 = (end2 - start2) / 1000;
 		System.out.println("Parallel: " + time2);
 	}
 
 	// thanks to linski on
 	// https://stackoverflow.com/questions/15862271/java-compute-intensive-task
 	public static boolean isPrime(BigInteger n) {
-		BigInteger counter = BigInteger.ONE.add(BigInteger.ONE);
-		boolean isPrime = true;
+		var counter = BigInteger.ONE.add(BigInteger.ONE);
+		var isPrime = true;
 		while (counter.compareTo(n) == -1) {
 			if (n.remainder(counter).compareTo(BigInteger.ZERO) == 0) {
 				isPrime = false;

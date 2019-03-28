@@ -8,6 +8,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Pattern: Task Convergence
@@ -32,10 +33,10 @@ public class TaskConvergence {
 	private ExecutorService executor;
 
 	private Runnable run = () -> {
-		Random random = new Random();
-		List<Long> results = new LinkedList<>();
+		var random = new Random();
+		var results = new LinkedList<Long>();
 		for (int i = 0; i < ITERS; i++) {
-			Long next = (long) random.nextInt(BOUND);
+			var next = (long) random.nextInt(BOUND);
 			results.add(next);
 		}
 		try {
@@ -66,6 +67,12 @@ public class TaskConvergence {
 	public void run() {
 		for (int i = 0; i < CORES; i++) {
 			executor.execute(run);
+		}
+		try {
+			executor.awaitTermination(5, TimeUnit.SECONDS);
+			executor.shutdown();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 

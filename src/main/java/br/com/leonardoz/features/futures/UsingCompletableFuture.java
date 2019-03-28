@@ -3,7 +3,6 @@ package br.com.leonardoz.features.futures;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -30,12 +29,14 @@ import java.util.function.Supplier;
  * xxxAsync(..., Executor executor); // Executed in the specified Executor, good
  * for Java EE.
  * 
+ * 
  * = supply x run =
  * 
  * supplyAsync(Supplier<U> supplier); // will complete asynchronously by calling
  * supplier.
  * 
  * runAsync(Runnable runnable); // will complete after the runnable executions;
+ * 
  * 
  * = thenApply x thenAccept x thenRun
  * 
@@ -140,8 +141,8 @@ import java.util.function.Supplier;
 public class UsingCompletableFuture {
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
-		Random random = new Random();
-		ExecutorService executor = Executors.newCachedThreadPool();
+		var random = new Random();
+		var executor = Executors.newCachedThreadPool();
 		// Creating
 		CompletableFuture<Integer> randomNum = CompletableFuture.supplyAsync(() -> random.nextInt(140), executor);
 
@@ -165,8 +166,8 @@ public class UsingCompletableFuture {
 		Integer value = mappedAndCombined.get();
 		System.out.println("Sum " + value);
 
-		// Indefined time task
-		Supplier<Double> ind = () -> {
+		// Undefined time task
+		Supplier<Double> randomDouble = () -> {
 			try {
 				Thread.sleep(random.nextInt(1000));
 			} catch (InterruptedException e) {
@@ -176,14 +177,14 @@ public class UsingCompletableFuture {
 		};
 
 		// Run after executed
-		CompletableFuture<Double> f1 = CompletableFuture.supplyAsync(ind);
-		CompletableFuture<Double> f2 = CompletableFuture.supplyAsync(ind);
-		CompletableFuture<Double> f3 = CompletableFuture.supplyAsync(ind);
-		CompletableFuture<Double> f4 = CompletableFuture.supplyAsync(ind);
+		CompletableFuture<Double> f1 = CompletableFuture.supplyAsync(randomDouble);
+		CompletableFuture<Double> f2 = CompletableFuture.supplyAsync(randomDouble);
+		CompletableFuture<Double> f3 = CompletableFuture.supplyAsync(randomDouble);
+		CompletableFuture<Double> f4 = CompletableFuture.supplyAsync(randomDouble);
 		CompletableFuture.anyOf(f1, f2, f3, f4).thenRun(() -> System.out.println("Completed"));
 
 		// Fastest result will be delivered
-		// Indefined time task - static value
+		// Undefined time task - static value
 		Supplier<String> getVal = () -> {
 			try {
 				Thread.sleep(random.nextInt(1000));

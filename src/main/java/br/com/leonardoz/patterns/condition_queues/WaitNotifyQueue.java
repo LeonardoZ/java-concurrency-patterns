@@ -39,16 +39,16 @@ public class WaitNotifyQueue {
 	public synchronized void message() throws InterruptedException {
 		while (!continueToNotify)
 			wait();
-		String message = messages.take();
+		var message = messages.take();
 		System.out.println(message);
 	}
 
 	public static void main(String[] args) {
-		List<String> messages = new LinkedList<>();
+		var messages = new LinkedList<String>();
 		for (int i = 0; i < 130; i++) {
 			messages.add(UUID.randomUUID().toString());
 		}
-		WaitNotifyQueue waitNotifyQueue = new WaitNotifyQueue(messages);
+		var waitNotifyQueue = new WaitNotifyQueue(messages);
 		new Thread(() -> {
 			try {
 				while (true) {
@@ -56,13 +56,14 @@ public class WaitNotifyQueue {
 					Thread.sleep(300);
 				}
 			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 				e.printStackTrace();
 			}
 		}).start();
-		Random r = new Random();
+		var random = new Random();
 		new Thread(() -> {
 			while (true) {
-				int val = r.nextInt(100);
+				int val = random.nextInt(100);
 				System.out.println(val);
 				if (val == 99) {
 					break;
@@ -70,6 +71,7 @@ public class WaitNotifyQueue {
 				try {
 					Thread.sleep(400);
 				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
 					e.printStackTrace();
 				}
 			}
@@ -77,6 +79,7 @@ public class WaitNotifyQueue {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 				e.printStackTrace();
 			}
 		}).start();

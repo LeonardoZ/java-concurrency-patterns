@@ -96,8 +96,7 @@ public class UsingForkJoinFramework {
 	 * 
 	 */
 	public ForkJoinPool getCommonPool() {
-		ForkJoinPool commonPool = ForkJoinPool.commonPool();
-		return commonPool;
+		return ForkJoinPool.commonPool();
 	}
 
 	/**
@@ -159,22 +158,22 @@ public class UsingForkJoinFramework {
 
 		@Override
 		protected BigInteger compute() {
-			List<RecSumTask> subTasks = new LinkedList<>();
+			var subTasks = new LinkedList<RecSumTask>();
 			if (numbers.size() < DIVIDE_AT) {
 				// directly
-				BigInteger subSum = BigInteger.ZERO;
+				var subSum = BigInteger.ZERO;
 				for (Integer number : numbers) {
 					subSum = subSum.add(BigInteger.valueOf(number));
 				}
 				return subSum;
 			} else {
 				// Divide to conquer
-				int size = numbers.size();
-				List<Integer> numbersLeft = numbers.subList(0, size / 2);
-				List<Integer> numbersRight = numbers.subList(size / 2, size);
+				var size = numbers.size();
+				var numbersLeft = numbers.subList(0, size / 2);
+				var numbersRight = numbers.subList(size / 2, size);
 
-				RecSumTask recSumLeft = new RecSumTask(numbersLeft);
-				RecSumTask recSumRight = new RecSumTask(numbersRight);
+				var recSumLeft = new RecSumTask(numbersLeft);
+				var recSumRight = new RecSumTask(numbersRight);
 
 				subTasks.add(recSumRight);
 				subTasks.add(recSumLeft);
@@ -184,8 +183,8 @@ public class UsingForkJoinFramework {
 				recSumRight.fork();
 			}
 
-			BigInteger sum = BigInteger.ZERO;
-			for (RecSumTask recSum : subTasks) {
+			var sum = BigInteger.ZERO;
+			for (var recSum : subTasks) {
 				// Join Child Tasks
 				sum = sum.add(recSum.join());
 			}
@@ -195,14 +194,14 @@ public class UsingForkJoinFramework {
 
 	public static void main(String[] args) {
 		// prepares dataset for the example
-		LinkedList<Integer> numbers = new LinkedList<>();
+		var numbers = new LinkedList<Integer>();
 		for (int i = 0; i < 500_000; i++) {
 			numbers.add(i);
 		}
 
 		// Usage
-		ForkJoinPool commonPool = ForkJoinPool.commonPool();
-		RecSumTask task = new RecSumTask(numbers);
+		var commonPool = ForkJoinPool.commonPool();
+		var task = new RecSumTask(numbers);
 		BigInteger result = commonPool.invoke(task);
 		System.out.println("Result is: " + result);
 		System.out.println("\n\n");

@@ -37,7 +37,7 @@ public class ParallelDivideAndConquer {
 		
 		@Override
 		protected Integer compute() {
-			int size = somethingToDivideAndConquer.size();
+			var size = somethingToDivideAndConquer.size();
 			if (size < THRESHOLD) {
 				// solves directly
 				return 1;

@@ -1,7 +1,6 @@
 package br.com.leonardoz.patterns.controlled_initialization;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -81,7 +80,7 @@ public class ControlledInitialization {
 	}
 
 	private void doTask() {
-		System.out.println("=== Resources initialized ===");
+		System.out.println("=== Resources Initialized ===");
 		System.out.println("Resource 1 instance " + resource1);
 		System.out.println("Resource 2 instance " + resource2);
 		System.out.println("Resource 3 instance " + resource3);
@@ -90,7 +89,7 @@ public class ControlledInitialization {
 
 	private void initialize() {
 		System.out.println("=== Initializing Resources ===");
-		ExecutorService executor = Executors.newFixedThreadPool(3);
+		var executor = Executors.newFixedThreadPool(3);
 		executor.execute(initResource1);
 		executor.execute(initResource2);
 		executor.execute(initResource3);
