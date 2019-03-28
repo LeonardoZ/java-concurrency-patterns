@@ -25,7 +25,9 @@ import java.util.concurrent.RecursiveTask;
  * 
  * One requirement for using the Fork/Join Framework is that all of the Subtasks
  * must be "completable and independent" of each other to be truly parallel, so
- * not every problem can be solved using this method.
+ * not every problem can be solved using this method. In general, the ForkJoin Framework 
+ * is to be used by CPU-intensive computations, not IO bound computations, due to the 
+ * long wait periods that could happen.
  * 
  * How it works
  * 
@@ -90,7 +92,7 @@ public class UsingForkJoinFramework {
 	 * Default instance of a fork join pool in a Java app, used by
 	 * CompletableFuture, and parallel streams. All threads used by the common pool
 	 * can be reused, released and reinstated after some time. This approach reduces
-	 * the resource consumption.
+	 * the resource consumption. It doesn't need to be closed/shutdown.
 	 * 
 	 */
 	public ForkJoinPool getCommonPool() {
@@ -112,8 +114,10 @@ public class UsingForkJoinFramework {
 	 * joined, like event-oriented asynchronous tasks.
 	 * 
 	 */
-	public ForkJoinPool customForkJoinPool(int parallelism, ForkJoinPool.ForkJoinWorkerThreadFactory factory,
-			UncaughtExceptionHandler handler, boolean asyncMode) {
+	public ForkJoinPool customForkJoinPool(int parallelism, 
+			ForkJoinPool.ForkJoinWorkerThreadFactory factory,
+			UncaughtExceptionHandler handler, 
+			boolean asyncMode) {
 		return new ForkJoinPool(parallelism, factory, handler, asyncMode);
 	}
 
