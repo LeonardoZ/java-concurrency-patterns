@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 /**
  * 
  * CompletableFuture is a Future that may be manually completed. It combines a
- * Future interface with the CompletionState interface, supporting dependent
+ * Future interface with the CompletionStage interface, supporting dependent
  * actions that trigger upon its completion, similarly to a callback.
  *
  * Important: Specify an Executor for async methods when available. All async
