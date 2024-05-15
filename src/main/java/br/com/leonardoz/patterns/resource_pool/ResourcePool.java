@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class ResourcePool<T> {
 
 	private final static TimeUnit TIME_UNIT = TimeUnit.SECONDS;
-	private Semaphore semaphore;
-	private BlockingQueue<T> resources;
+	private final Semaphore semaphore;
+	private final BlockingQueue<T> resources;
 
 	public ResourcePool(int poolSize, List<T> initializedResources) {
 		this.semaphore = new Semaphore(poolSize, true);
@@ -39,9 +39,13 @@ public class ResourcePool<T> {
 		semaphore.acquire();
 		try {
 			T resource = resources.poll(secondsToTimeout, TIME_UNIT);
+			if (resource == null) {
+				semaphore.release();
+			}
 			return resource;
-		} finally {
+		} catch (Exception e) {
 			semaphore.release();
+			throw e;
 		}
 	}
 
