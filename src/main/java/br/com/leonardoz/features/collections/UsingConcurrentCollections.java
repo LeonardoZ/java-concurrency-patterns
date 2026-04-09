@@ -1,5 +1,7 @@
 package br.com.leonardoz.features.collections;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Concurrent collections are an alternative to the Synchronized Collections.
- * 
+ *
  * Supports concurrent access from n threads and performs better than
  * Synchronized collections.
  *
@@ -22,18 +24,35 @@ public class UsingConcurrentCollections {
 	 * achieve better performance.
 	 *
 	 * Locks it's values with Lock Striping.
-	 * 
+	 *
 	 * Lock Striping divides the protected region through several locks.
-	 * 
+	 *
 	 * - Don't throw ConcurrentModificationException
-	 * 
+	 *
 	 * - size() and isEmpty() can be incorrect. Don't rely on them.
-	 * 
+	 *
 	 * - Supports atomic operations, don't need client side locking.
-	 * 
+	 *
 	 * - Readers can access concurrently, and iterator have weak consistency.
-	 * 
+	 *
 	 * - Just a few Writers can modify it.
+	 *
+	 * Java 8+ additions demonstrated below:
+	 *
+	 * - {@code merge(key, value, remappingFn)} — atomically combines a new value
+	 *   with an existing one using a merge function; ideal for frequency counting.
+	 *
+	 * - {@code compute(key, remappingFn)} — atomically computes a new value for a
+	 *   key based on its current value (or null if absent).
+	 *
+	 * - {@code forEach(parallelismThreshold, action)} — applies an action to each
+	 *   entry, processing in parallel when the map size exceeds the threshold.
+	 *
+	 * - {@code reduceValues(parallelismThreshold, reducer)} — parallel reduction
+	 *   over values; returns null if the map is empty.
+	 *
+	 * - {@code search(parallelismThreshold, searchFn)} — returns the first
+	 *   non-null result of applying the function, stopping as soon as found.
 	 */
 	public static void usingConcurrentHashMap() {
 		System.out.println("=== ConcurrentHashMap ===");
@@ -69,6 +88,40 @@ public class UsingConcurrentCollections {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+
+		// -----------------------------------------------------------------------
+		// Java 8+ bulk operations on ConcurrentHashMap
+		// -----------------------------------------------------------------------
+		System.out.println("=== ConcurrentHashMap — Java 8+ bulk operations ===");
+
+		var words = Arrays.asList("apple", "banana", "apple", "cherry", "banana", "apple");
+
+		// merge: atomically increment a word counter; no external locking needed.
+		var wordCounts = new ConcurrentHashMap<String, Integer>();
+		for (var word : words) {
+			wordCounts.merge(word, 1, Integer::sum);
+		}
+		System.out.println("Word counts (merge): " + wordCounts);
+
+		// compute: square every existing value in-place atomically.
+		wordCounts.replaceAll((k, v) -> v);          // baseline copy
+		wordCounts.compute("apple", (k, v) -> v == null ? 1 : v * v);
+		System.out.println("After compute square of 'apple': " + wordCounts.get("apple"));
+
+		// forEach with parallelism threshold (process in parallel for large maps)
+		System.out.println("forEach (parallel threshold = 2):");
+		wordCounts.forEach(2, (k, v) ->
+				System.out.println("  " + k + " -> " + v));
+
+		// reduceValues: sum all counts in parallel
+		Integer total = wordCounts.reduceValues(2, Integer::sum);
+		System.out.println("Total word occurrences (reduceValues): " + total);
+
+		// search: find the first word whose count is > 1
+		String popular = wordCounts.search(2, (k, v) -> v > 1 ? k : null);
+		System.out.println("First word with count > 1 (search): " + popular);
+
+		System.out.println("\n");
 	}
 
 	/**

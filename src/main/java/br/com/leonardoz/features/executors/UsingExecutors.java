@@ -31,6 +31,26 @@ import java.util.concurrent.TimeUnit;
  * - Work-Stealing Thread Pool: Based on Fork/Join Framework, applies the
  * work-stealing algorithm for balancing tasks, with available processors as a
  * paralellism level.
+ *
+ * == Java 21+ (requires JDK upgrade) ==
+ *
+ * - Virtual Thread-Per-Task Executor: Creates a new virtual thread for each
+ * submitted task. Virtual threads are lightweight (managed by the JVM, not the
+ * OS) and excel at I/O-bound workloads. The executor is AutoCloseable, so
+ * try-with-resources automatically awaits all submitted tasks:
+ *
+ * <pre>{@code
+ * try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+ *     IntStream.range(0, 10_000).forEach(i ->
+ *         executor.submit(() -> {
+ *             Thread.sleep(Duration.ofMillis(10));
+ *             return Thread.currentThread().getName();
+ *         }));
+ * } // auto-shutdown: waits for all 10,000 tasks to finish
+ * }</pre>
+ *
+ * See {@link br.com.leonardoz.features.threads.UsingVirtualThreads} for a
+ * detailed description of virtual threads.
  * 
  * And 2 types of tasks:
  * 
