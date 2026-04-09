@@ -103,8 +103,7 @@ public class UsingConcurrentCollections {
 		}
 		System.out.println("Word counts (merge): " + wordCounts);
 
-		// compute: square every existing value in-place atomically.
-		wordCounts.replaceAll((k, v) -> v);          // baseline copy
+		// compute: square the count of "apple" in-place atomically.
 		wordCounts.compute("apple", (k, v) -> v == null ? 1 : v * v);
 		System.out.println("After compute square of 'apple': " + wordCounts.get("apple"));
 
