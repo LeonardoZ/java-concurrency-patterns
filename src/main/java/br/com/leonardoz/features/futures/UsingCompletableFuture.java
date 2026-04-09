@@ -136,6 +136,19 @@ import java.util.function.Supplier;
  * CompletableFuture.completeExceptionally() // completes throwing a exception
  * 
  * CompletableFuture.completeExceptionally(ex) // completes with a exception
+ * = Java 9+ additions =
+ *
+ * orTimeout(long timeout, TimeUnit unit)
+ *   Completes the future <em>exceptionally</em> with a TimeoutException if it
+ *   is not completed before the given timeout elapses.
+ *
+ * completeOnTimeout(T value, long timeout, TimeUnit unit)
+ *   Completes the future with the provided default value if it is not completed
+ *   before the timeout.  Unlike orTimeout, this is a <em>normal</em> completion.
+ *
+ * exceptionallyAsync(fn, executor)
+ *   Async version of exceptionally(); recovers from an exception on a separate
+ *   thread.  (Java 12)
  *
  */
 public class UsingCompletableFuture {
@@ -204,6 +217,33 @@ public class UsingCompletableFuture {
 		CompletableFuture
 			.supplyAsync(getVal)
 			.acceptEitherAsync(CompletableFuture.supplyAsync(getVal2, executor), (firstToBeReady) -> System.out.println(firstToBeReady), executor);
+
+		// -------------------------------------------------------------------
+		// Java 9+ timeout APIs
+		// -------------------------------------------------------------------
+
+		// orTimeout — completes exceptionally with TimeoutException if the
+		// future is not done within the specified duration.
+		Supplier<String> slowSupplier = () -> {
+			try { Thread.sleep(2000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+			return "slow result";
+		};
+
+		String orTimeoutResult = CompletableFuture
+				.supplyAsync(slowSupplier, executor)
+				.orTimeout(500, TimeUnit.MILLISECONDS)
+				.exceptionally(ex -> "Timed out: " + ex.getClass().getSimpleName())
+				.get();
+		System.out.println("orTimeout result: " + orTimeoutResult);
+
+		// completeOnTimeout — completes normally with a fallback value if the
+		// future is not done within the specified duration.
+		String completeOnTimeoutResult = CompletableFuture
+				.supplyAsync(slowSupplier, executor)
+				.completeOnTimeout("default-value", 500, TimeUnit.MILLISECONDS)
+				.get();
+		System.out.println("completeOnTimeout result: " + completeOnTimeoutResult);
+
 		executor.shutdown();
 		executor.awaitTermination(3000, TimeUnit.SECONDS);
 	}

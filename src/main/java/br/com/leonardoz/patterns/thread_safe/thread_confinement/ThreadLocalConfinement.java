@@ -15,12 +15,9 @@ package br.com.leonardoz.patterns.thread_safe.thread_confinement;
  */
 public class ThreadLocalConfinement {
 
-	private static final ThreadLocal<Object> threadLocalOject = new ThreadLocal<Object>() {
-		@Override
-		protected Object initialValue() {
-			return new Object();
-		}
-	};	
+	// Java 8+: ThreadLocal.withInitial() is the preferred concise form.
+	private static final ThreadLocal<Object> threadLocalOject =
+			ThreadLocal.withInitial(Object::new);
 	
 	public Object getNowThreadSafeObjectInstance() {
 		return threadLocalOject.get();
